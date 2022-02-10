@@ -10,6 +10,27 @@ library(tmap)
 library(caribouMetrics)
 # raster library used but not loaded since it conflicts with tidyverse
 
+library(osfr)
+
+# To use the pre-prepared data skip 1_dataPrep.R and run the following
+if(!dir.exists("data/Missisa")){
+  # Download the zip file of prepared files from OSF
+  osf_proj <- osf_retrieve_node("https://osf.io/r9mkp/")
+  
+  osf_ls_files(osf_proj) %>% filter(name == "Missisa.zip") %>% 
+    osf_download(path = "data")
+  
+  # extract it to the data folder of the current project
+  unzip("data/Missisa.zip", exdir = "data")
+}
+
+
+# ensure outputs folder exists
+if(!dir.exists("outputs")){
+  dir.create("outputs")
+}
+
+
 dat_pth <- "data/Missisa/"
 
 #Generate/Reproduce RSF for Missisa Range

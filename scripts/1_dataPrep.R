@@ -1,11 +1,28 @@
 # Crop input data sets to buffered Missisa range and convert to 250m raster if
 # needed.
+
+# It is not necessary to run this script. If you want to start with the
+# prepared data go to 2_caribouHabitatMissisa
 library(raster)
 library(sf)
 library(dplyr)
 library(fasterize)
+library(osfr)
+
+# Download the zip file of raw files from OSF
+osf_proj <- osf_retrieve_node("https://osf.io/r9mkp/")
+
+osf_ls_files(osf_proj) %>% filter(name == "inputNV.zip") %>% 
+  osf_download(path = "data")
+
+# extract it to the data folder of the current project
+unzip("data/inputNV.zip", exdir = "data")
 
 outMiss <- "data/Missisa/"
+
+if(!dir.exists(outMiss)){
+  dir.create(outMiss)
+}
 
 caribouRanges <- st_read("data/inputNV/caribouRanges/Caribou_Range_Boundary.shp", 
                          quiet = TRUE)
