@@ -5,7 +5,7 @@ library(sf)
 library(dplyr)
 library(fasterize)
 
-outMiss <- "data/inputNV/Missisa/"
+outMiss <- "data/Missisa/"
 
 caribouRanges <- st_read("data/inputNV/caribouRanges/Caribou_Range_Boundary.shp", 
                          quiet = TRUE)

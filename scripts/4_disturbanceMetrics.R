@@ -4,7 +4,7 @@ library(sf)
 library(tidyverse)
 
 # path to data
-dat_pth <- "data/inputNV/Missisa/"
+dat_pth <- "data/Missisa/"
 
 caribouRanges <- st_read("data/inputNV/caribouRanges/Caribou_Range_Boundary.shp", 
                          quiet = TRUE)

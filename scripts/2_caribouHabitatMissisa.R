@@ -10,7 +10,7 @@ library(tmap)
 library(caribouMetrics)
 # raster library used but not loaded since it conflicts with tidyverse
 
-dat_pth <- "data/inputNV/Missisa/"
+dat_pth <- "data/Missisa/"
 
 #Generate/Reproduce RSF for Missisa Range
 

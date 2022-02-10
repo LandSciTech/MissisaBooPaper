@@ -6,7 +6,7 @@ library(grid)
 library(viridis)
 library(sfheaders) # to remove holes for AOU boundary
 
-dat_pth <- "data/inputNV/Missisa/"
+dat_pth <- "data/Missisa/"
 
 caribouRanges <- read_sf("data/inputNV/caribouRanges/Caribou_Range_Boundary.shp", 
                          quiet = TRUE)
