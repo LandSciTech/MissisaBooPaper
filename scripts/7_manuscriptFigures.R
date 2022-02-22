@@ -15,11 +15,6 @@ missisa <- caribouRanges %>%
   filter(RANGE_NAME %in% c("Missisa")) %>%
   st_transform(st_crs(raster::raster(file.path(dat_pth, "plc250.tif"))))
 
-mines_sf <- read_sf("data/inputNV/ROFDevelopment/mine_area.shp") %>% 
-  st_union() %>% 
-  st_transform(st_crs(missisa)) %>% 
-  st_make_valid()
-
 road_RoF <- read_sf(file.path(dat_pth, "road_ROFDevelopment.shp"))
 
 road_2020 <- read_sf(file.path(dat_pth, "road_ORNMNRFMiss2020.shp"))
@@ -31,11 +26,26 @@ canada <- province2 %>%
   st_transform(st_crs(caribouRanges)) %>% 
   st_simplify(dTolerance = 10000)
 
-aou <- read_sf("data/inputNV/MNR_FMUs_20220208/FOREST_MANAGEMENT_UNIT.shp") 
+# Takes a long time so use saved files
+# aou <- read_sf("data/inputNV/MNR_FMUs_20220208/FOREST_MANAGEMENT_UNIT.shp") 
+# 
+# aou2 <- st_union(aou)
+# aou2 <- st_sf(geometry = aou2) %>% 
+#   sf_remove_holes(aou2)
+# 
+# mines_sf <- read_sf("data/inputNV/ROFDevelopment/mine_area.shp") %>% 
+#   st_union() %>% 
+#   st_transform(st_crs(missisa)) 
+# 
+# # save aou and mines union since it took a long time
+# st_write(aou2, "data/inputNV/MNR_FMUs_20220208/AOU.shp")
+# st_write(mines_sf, "data/inputNV/ROFDevelopment/mine_area_union.shp")
 
-aou2 <- st_union(aou)
-aou2 <- st_sf(AOU = "AOU", geometry = aou2) %>% 
-  sf_remove_holes(aou2)
+aou2 <- read_sf("data/inputNV/MNR_FMUs_20220208/AOU.shp")
+mines_sf <- read_sf("data/inputNV/ROFDevelopment/mine_area_union.shp") %>% 
+  st_make_valid()
+
+aou2 <- mutate(aou2, AOU = "AOU")
 
 ecozones <- read_sf("data/inputNV/Ecozones/ecozones.shp")
 
@@ -43,10 +53,6 @@ hudPlBorSheild <- ecozones %>%
   filter(ZONE_NAME %in% c("Hudson Plain", "Boreal Shield")) %>% 
   st_transform(st_crs(caribouRanges)) %>% 
   st_intersection(caribouRanges)
-
-# save aou and mines union since it took a long time
-st_write(aou2, "data/inputNV/MNR_FMUs_20220208/AOU.shp")
-st_write(mines_sf, "data/inputNV/ROFDevelopment/mine_area_union.shp")
 
 # Figure 1 #============================
 canada_overlay <- tm_shape(canada)+
@@ -75,7 +81,7 @@ boo_fig2 <-
 
 vp <- viewport(x=0.89, y=0.98, width = 0.3, height=0.25, just=c("right", "top"))
 
-tmap_save(boo_fig2, filename = "outputs/Figure1_StudyArea.png",
+tmap_save(boo_fig2, filename = "outputs/Figure1_StudyArea.pdf",
   dpi = 1200, insets_tm = canada_overlay, insets_vp = vp,
   height = 7, width = 7, units = "in")
 
@@ -102,8 +108,8 @@ missisa_RoF_fig <- tm_shape(missisa, legend.show=TRUE) +
 
 missisa_RoF_fig
 
-missisa_RoFmines_fig <- tm_shape(mines_ras)+
-  tm_raster(palette = c("white", "red"), legend.show = FALSE)+
+missisa_RoFmines_fig <- tm_shape(mines_sf)+
+  tm_fill(col = "red")+
   tm_shape(missisa, legend.show=TRUE, is.master = TRUE) + 
   tm_borders(col="grey70", lwd=1)+
   tm_shape(road_RoF)+
@@ -118,7 +124,7 @@ missisa_RoFmines_fig
 
 missisa_map <- tmap_arrange(missisa_fig, missisa_RoF_fig, missisa_RoFmines_fig)
 
-tmap_save(missisa_map, "outputs/Figure2_MissisaScenarios.png", dpi=600, units="in", 
+tmap_save(missisa_map, "outputs/Figure2_MissisaScenarios.pdf", dpi=600, units="in", 
           height=4, width=7)
 
 # Figure 3 #==============================================================
@@ -149,8 +155,8 @@ missisa_boo_plot <- tm_shape(missisa_boo,
 
 missisa_boo_plot
 
-tmap_save(missisa_boo_plot, "outputs/Figure3_Missisa2010.png", dpi=1200,
-          height = 3, width = 7)
+tmap_save(missisa_boo_plot, "outputs/Figure3_Missisa2010.pdf", dpi=1200,
+          height = 2, width = 7)
 
 # Figure 4 #====================================================================
 missisa_boo_RoF_plot <- tm_shape(missisa_boo_RoF, 
@@ -181,9 +187,6 @@ missisa_legend <- tm_shape(missisa_boo_RoF$Fall, raster.downsample = F)+
             style="cont",
             breaks = seq(0,1, by=0.25))+
   tm_layout(legend.only = T)
-# 
-# tmap_save(missisa_boo_ROF_plot, "outputs/missisa_RoF_caribouMetrics_ppt.png", dpi=600)
-# tmap_save(missisa_legend, "outputs/missisa_legend_ppt.png", dpi=600)
 
 #Nipigon
 
@@ -203,8 +206,6 @@ missisa_boo_Nip_plot <- tm_shape(missisa_boo_Nip,
             legend.title.size = 1,
             main.title.size = 1)+
   tm_facets(nrow = 1)
-
-# tmap_save(missisa_boo_Nip_plot,"outputs/missisa_RoF_Nip_caribouMetrics.png", dpi=1200)
 
 #Pagwachuan
 
@@ -244,8 +245,7 @@ missisa_boo_JB_plot <- tm_shape(missisa_boo_JB,
             main.title.size = 1)+
   tm_facets(nrow = 1)
 
-# tmap_save(missisa_boo_JB_plot,"outputs/missisa_RoF_JB_caribouMetrics.png", dpi=1200)
-png("outputs/Figure4_MissisaROFDevComapare.png", res = 1200, width = 7, height = 8, units = "in")
+pdf("outputs/Figure4_MissisaROFDevComapare.pdf", width = 7, height = 8, units = "in")
 grid.newpage()
 page.layout <- grid.layout(nrow = 4, ncol = 2, widths=c(.9,.1), 
                            heights=c(0.25, 0.25, 0.25, 0.25))
