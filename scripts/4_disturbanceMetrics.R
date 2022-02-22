@@ -17,7 +17,6 @@ missisa <- caribouRanges %>%
 missisa_DM <- disturbanceMetrics(
   landCover = file.path(dat_pth, "plc250.tif"),
   natDist = file.path(dat_pth, "fireAFFES2020_250.tif"),
-  anthroDist = file.path(dat_pth, "harvMNRF2018_250.tif"),
   linFeat = list(roads = file.path(dat_pth, "road_ORNMNRFMiss2020.shp"),
                  rail = file.path(dat_pth, "rail.shp"),
                  utilities = file.path(dat_pth, "util2010.shp")),
@@ -31,7 +30,6 @@ disturbances_missisa <- missisa_DM@disturbanceMetrics
 missisa_DM_RoF <- disturbanceMetrics(
   landCover = file.path(dat_pth, "plc250.tif"),
   natDist = file.path(dat_pth, "fireAFFES2020_250.tif"),
-  anthroDist = file.path(dat_pth, "harvMNRF2018_250.tif"),
   linFeat = list(roads = file.path(dat_pth, "road_ROFDevelopment.shp"),
                  rail = file.path(dat_pth, "rail.shp"),
                  utilities = file.path(dat_pth, "util2010.shp")),

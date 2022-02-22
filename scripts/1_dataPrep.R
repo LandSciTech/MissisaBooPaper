@@ -161,62 +161,6 @@ fireAFFESMiss2010 <- fasterize::fasterize(fireAFFESMiss2010, tmpltRastMiss,
 raster::writeRaster(fireAFFESMiss2010, paste0(outMiss, "fireAFFES2010_250.tif"),
                     datatype = "INT1U", overwrite = TRUE)
 
-# MNRF Harvest data from annual report #========================================
-anReport <- st_layers("data/inputNV/MNRF_plan/AR_Master_2018.gdb")
-
-# CC clearcut, SE selection, SH shelterwood for 2002 to present ie 2016
-Harvest_CC02 <- st_read("data/inputNV/MNRF_plan/AR_Master_2018.gdb", 
-                        layer = "Harvest_CC02")
-Harvest_SE02 <- st_read("data/inputNV/MNRF_plan/AR_Master_2018.gdb", 
-                        layer = "Harvest_SE02")
-Harvest_SH02 <- st_read("data/inputNV/MNRF_plan/AR_Master_2018.gdb", 
-                        layer = "Harvest_SH02")
-
-# CC clearcut, SE selection, SH shelterwood for 2017 and 2018
-Harvest_CC17 <- st_read("data/inputNV/MNRF_plan/AR_Master_2018.gdb", 
-                        layer = "Harvest_CC17")
-Harvest_SE17 <- st_read("data/inputNV/MNRF_plan/AR_Master_2018.gdb", 
-                        layer = "Harvest_SE17")
-Harvest_SH17 <- st_read("data/inputNV/MNRF_plan/AR_Master_2018.gdb", 
-                        layer = "Harvest_SH17")
-
-# Estimated harvest from 1990 to 2003
-Harvest_Est_1990_03 <- st_read("data/inputNV/MNRF_plan/AR_Master_2018.gdb", 
-                               layer = "Harvest_Est_1990_03")
-
-# contains some "MULTISURFACE" geometry types which cause problems
-# Harvest_CC17 %>% filter(st_geometry_type(Shape) == "MULTISURFACE") %>% View()
-tmpfile <-  tempfile(fileext = ".shp")
-st_write(Harvest_CC17, tmpfile)
-Harvest_CC17 <- st_read(tmpfile) %>% 
-  rename(Shape = geometry)
-
-harvestAllMNRF <- rbind(Harvest_CC02 %>% select(AR_YEAR),
-                        Harvest_SE02 %>% select(AR_YEAR),
-                        Harvest_SH02 %>% select(AR_YEAR), 
-                        Harvest_CC17 %>% select(AR_YEAR),
-                        Harvest_SE17 %>% select(AR_YEAR),
-                        Harvest_SH17 %>% select(AR_YEAR), 
-                        Harvest_Est_1990_03 %>% transmute(AR_YEAR = YRDEP)) %>% 
-  st_transform(crsUse)
-
-harvMNRFMiss <- st_filter(harvestAllMNRF, miss)
-
-
-harvMNRFMiss2018 <- fasterize::fasterize(harvMNRFMiss %>% st_cast(),
-                                          tmpltRastMiss, 
-                                          background = 0)
-raster::writeRaster(harvMNRFMiss2018, paste0(outMiss, "harvMNRF2018_250.tif"),
-                    datatype = "INT1U", overwrite = TRUE)
-
-harvMNRFMiss2010 <- fasterize::fasterize(harvMNRFMiss %>% 
-                                            filter(AR_YEAR <= 2010) %>% 
-                                            st_cast(),
-                                          tmpltRastMiss, 
-                                          background = 0)
-raster::writeRaster(harvMNRFMiss2010, paste0(outMiss, "harvMNRF2010_250.tif"),
-                    datatype = "INT1U", overwrite = TRUE)
-
 # ROF development #=========================
 mines_sf <- read_sf("data/inputNV/ROFDevelopment/mine_area.shp")
 
