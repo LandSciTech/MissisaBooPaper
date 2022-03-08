@@ -45,7 +45,17 @@ aou2 <- read_sf("data/inputNV/MNR_FMUs_20220208/AOU.shp")
 mines_sf <- read_sf("data/inputNV/ROFDevelopment/mine_area_union.shp") %>% 
   st_make_valid()
 
-aou2 <- mutate(aou2, AOU = "AOU")
+aou2 <- mutate(aou2, AOU = "AOU") %>% st_transform(st_crs(caribouRanges)) %>% 
+     sf_remove_holes()
+
+# make aou just a line at the top
+aouline <- aou2 %>% st_cast(to = "MULTILINESTRING") %>% 
+  st_cast(to = "LINESTRING")
+
+aouline2 <- st_intersection(aouline, caribouRanges %>% 
+                              filter(!RANGE_NAME %in% c("Discontinuous Distribution", 
+                                                        "Lake Superior Coast")))
+aouline3 <- st_simplify(aouline2, 15000)
 
 ecozones <- read_sf("data/inputNV/Ecozones/ecozones.shp")
 
@@ -55,7 +65,7 @@ hudPlBorSheild <- ecozones %>%
   st_intersection(caribouRanges)
 
 # Figure 1 #============================
-canada_overlay <- tm_shape(canada)+
+canada_overlay <- tm_shape(canada, projection = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs")+
   tm_borders(col="black")+
   tm_shape(caribouRanges)+
   tm_fill("grey")+
@@ -63,23 +73,33 @@ canada_overlay <- tm_shape(canada)+
 
 boo_fig2 <- 
   tm_shape(hudPlBorSheild)+
-  tm_fill(col = "ZONE_NAME", title = "Ecozone")+
+  tm_fill(col = "ZONE_NAME", title = "Ecozone", alpha = 0.6, 
+          palette = c("#f4a582", "#92c5de"))+
   tm_shape(caribouRanges, is.master = TRUE) + 
   tm_borders()+
-  tm_shape(sfheaders::sf_remove_holes(aou2))+
-  tm_borders(col = "darkgreen", lwd = 1.5)+
-  tm_text("AOU", col = "darkgreen", fontface = "bold", xmod = 5, ymod = -1.2)+
+  tm_shape(aouline3)+
+  tm_lines(col = "#0571b0", lty = "dashed", lwd = 2)+
   tm_shape(mines_sf)+
-  tm_fill(col = "red")+
+  tm_fill(col = "#ca0020")+
   tm_shape(missisa)+
   tm_borders(col="black", lwd = 2)+
   tm_shape(caribouRanges, is.master = TRUE) +
   tm_text("RANGE_NAME", size= 1, fontface = "bold")+
   tm_scale_bar(position = c("left","bottom"), text.size=1)+
   tm_compass(position = c("right", "top"), size=3)+
-  tm_layout(frame=F, legend.position = c("LEFT", "TOP"))
+  tm_layout(frame=F, legend.position = c(0, 0.85), 
+            legend.title.size = 0.8, 
+            legend.height = -0.25)+
+  tm_add_legend(type = c("line"), 
+                labels = c("Managed Forest\nBoundary"),
+                col = c("#0571b0"), lty = "dashed", lwd = 2)+
+  tm_add_legend(type = c("fill"), 
+                labels = c("Mining Claims"),
+                col = c("#ca0020"), 
+                border.col = NA)
 
-vp <- viewport(x=0.89, y=0.98, width = 0.3, height=0.25, just=c("right", "top"))
+vp <- viewport(x=0.89, y=0.98, width = 0.3, height=0.25,
+               just=c("right", "top"))
 
 tmap_save(boo_fig2, filename = "outputs/Figure1_StudyArea.pdf",
   dpi = 1200, insets_tm = canada_overlay, insets_vp = vp,
@@ -94,33 +114,27 @@ missisa_fig <- tm_shape(missisa, legend.show=TRUE) +
   tm_compass(position = c("right", "top"), size=2)+
   tm_layout(main.title="a", main.title.size = 1)
 
-missisa_fig
-
 missisa_RoF_fig <- tm_shape(missisa, legend.show=TRUE) + 
   tm_borders(col="grey70", lwd=1)+
   tm_shape(road_RoF)+
-  tm_lines(col="grey40", lwd = 2)+
+  tm_lines(col="grey60", lwd = 2)+
   tm_shape(road_2020)+
   tm_lines(lty="solid", col="black", lwd = 2)+
   tm_scale_bar(position = c("left","bottom"), text.size=5)+
   tm_compass(position = c("right", "top"), size=2)+
   tm_layout(main.title="b", main.title.size = 1)
 
-missisa_RoF_fig
-
 missisa_RoFmines_fig <- tm_shape(mines_sf)+
-  tm_fill(col = "red")+
+  tm_fill(col = "#ca0020")+
   tm_shape(missisa, legend.show=TRUE, is.master = TRUE) + 
   tm_borders(col="grey70", lwd=1)+
   tm_shape(road_RoF)+
-  tm_lines(col="grey40", lwd = 2)+
+  tm_lines(col="grey60", lwd = 2)+
   tm_shape(road_2020)+
   tm_lines(lty="solid", col="black", lwd = 2)+
   tm_scale_bar(position = c("left","bottom"), text.size=5)+
   tm_compass(position = c("right", "top"), size=2)+
   tm_layout(main.title="c", main.title.size = 1)
-
-missisa_RoFmines_fig
 
 missisa_map <- tmap_arrange(missisa_fig, missisa_RoF_fig, missisa_RoFmines_fig)
 

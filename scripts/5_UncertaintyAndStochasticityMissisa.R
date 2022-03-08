@@ -6,6 +6,11 @@ library(tidyverse)
 library(ggpubr)
 theme_set(theme_bw())
 
+dia_shp <- 23
+
+err_col <- "grey50"
+
+
 # get outputs from demographics
 missisa_dist <- read.csv("data/disturbances_missisa_all.csv")
 
@@ -67,18 +72,19 @@ base1 <- ggplot(data = rateSummaries,
                 aes(x = Anthro, y = S_bar, ymin = S_PIlow, ymax = S_PIhigh)) +
   geom_line(data = subset(rateSamples), size = 0.5, alpha = 0.5, 
             aes(x = Anthro, y = S_bar, group = rep, colour = rep)) +
-  geom_line(colour = "grey", size = 2, linetype = "dotted") +
+  geom_line(colour = "grey50", size = 2, linetype = "dotted") +
   # geom_boxplot(data=subset(rateSamplesLarge,Anthro<10),aes(x=Anthro,y=S_bar,group=Anthro),width=2)+
-  geom_errorbar(data = subset(rateSummaries, Anthro < 10), width = 2, size = 0.7) +
+  geom_errorbar(data = subset(rateSummaries, Anthro < 10), 
+                width = 2, size = 0.7, col = err_col) +
   # geom_point(data=subset(rateSummaries,Anthro<10))+
   geom_point(data = data.frame(Anthro = 0.27, S_bar = 0.8, 
                                S_PIlow = 0, S_PIhigh = 0), 
-             size = 2, shape = 5) +
+             size = 2, shape = dia_shp, fill = "black") +
   xlab("Anthropogenic Disturbance (%)") +
   ylab("Adult Female Survival, S") +
   scale_x_continuous(limits = c(-1, 90), breaks = c(0, 20, 40, 60, 80)) +
   scale_y_continuous(limits = c(0.65, 1)) +
-  theme(legend.position = "none")
+  theme(legend.position = "none", plot.margin = margin(l = 0.6, unit = "cm"))
 
 plot_recruitment3 <- ggplot(data = rateSummaries,
                             aes(x = Anthro, y = R_bar * 100, 
@@ -86,18 +92,19 @@ plot_recruitment3 <- ggplot(data = rateSummaries,
   geom_line(data = rateSamples, size = 0.5, 
             aes(x = Anthro, y = R_bar * 100, group = fullGrp, color = fullGrp),
             alpha = 0.5) +
-  geom_line(colour = "grey", size = 2, linetype = "dotted") +
+  geom_line(colour = "grey50", size = 2, linetype = "dotted") +
   # geom_boxplot(data=subset(rateSamplesLarge,Anthro<10),aes(x=Anthro,y=R_bar*100,group=Anthro),width=2)+
-  geom_errorbar(data = subset(rateSummaries, Anthro < 10), width = 2, size = 0.7) +
+  geom_errorbar(data = subset(rateSummaries, Anthro < 10), width = 2,
+                size = 0.7, col = err_col) +
   # geom_point(data=subset(rateSummaries,Anthro<10))+
   geom_point(data = data.frame(Anthro = 0.27, R_bar = 0.142, R_PIlow = 0, 
                                R_PIhigh = 0),
-             size = 2, shape = 5) +
+             size = 2, shape = dia_shp, fill = "black") +
   scale_x_continuous(limits = c(-1, 90), breaks = c(0, 20, 40, 60, 80)) +
   scale_y_continuous(limits = c(0, 60), breaks = c(0, 10, 20, 30, 40, 50, 60)) +
   xlab("Anthropogenic disturbance (%)") +
   ylab("Recruitment (calves/100 cows)") +
-  theme(legend.position = "none")
+  theme(legend.position = "none", plot.margin = margin(l = 0.6, unit = "cm"))
 
 # demography
 pars <- data.frame(N0 = c(round(745 / 2)))
@@ -156,17 +163,19 @@ plot_lambda <- ggplot(oo,
   geom_line(size = 0.5,
             aes(x = Anthro, y = lambda, group = fullGrp, color = fullGrp), 
             alpha = 0.5) +
-  geom_errorbar(data = subset(ooS, Anthro < 10), width = 2, size = 0.7) +
+  geom_errorbar(data = subset(ooS, Anthro < 10), width = 2, 
+                size = 0.7, col = err_col) +
   geom_point(data = data.frame(Anthro = 0.27, lambda = 0.86, fullGrp = 0,
                                lambdaH = 0.86, lambdaL = 0.86), 
-             size = 2, shape = 5) +
+             size = 2, shape = dia_shp, fill = "black") +
   scale_x_continuous(limits = c(-1, 90), breaks = c(0, 20, 40, 60, 80)) +
   xlab("Anthropogenic disturbance (%)") +
   ylab(expression("Average Population Trend " * lambda)) +
-  theme(legend.position = "none")
+  theme(legend.position = "none", plot.margin = margin(l = 0.6, unit = "cm"))
 
 # combine ggplots to one figure
-ggpubr::ggarrange(base1, plot_recruitment3, plot_lambda, labels = "auto")
+ggpubr::ggarrange(base1, plot_recruitment3, plot_lambda, labels = "auto",
+                  ncol = 1, vjust = 1)
 
-ggsave("outputs/missisaDemoRates.png", width = 16, height = 15, units = "cm", 
+ggsave("outputs/Figure5_missisaDemoRates.png", width = 5, height = 7, units = "in", 
        dpi = 1200)
