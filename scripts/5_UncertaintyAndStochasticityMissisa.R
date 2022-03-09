@@ -81,7 +81,7 @@ base1 <- ggplot(data = rateSummaries,
                                S_PIlow = 0, S_PIhigh = 0), 
              size = 2, shape = dia_shp, fill = "black") +
   xlab("Anthropogenic Disturbance (%)") +
-  ylab("Adult Female Survival, S") +
+  ylab("Adult Female Survival") +
   scale_x_continuous(limits = c(-1, 90), breaks = c(0, 20, 40, 60, 80)) +
   scale_y_continuous(limits = c(0.65, 1)) +
   theme(legend.position = "none", plot.margin = margin(l = 0.6, unit = "cm"))
@@ -170,12 +170,12 @@ plot_lambda <- ggplot(oo,
              size = 2, shape = dia_shp, fill = "black") +
   scale_x_continuous(limits = c(-1, 90), breaks = c(0, 20, 40, 60, 80)) +
   xlab("Anthropogenic disturbance (%)") +
-  ylab(expression("Average Population Trend " * lambda)) +
+  ylab(expression("Average Growth Rate " * lambda)) +
   theme(legend.position = "none", plot.margin = margin(l = 0.6, unit = "cm"))
 
 # combine ggplots to one figure
 ggpubr::ggarrange(base1, plot_recruitment3, plot_lambda, labels = "auto",
                   ncol = 1, vjust = 1)
 
-ggsave("outputs/Figure5_missisaDemoRates.png", width = 5, height = 7, units = "in", 
+ggsave("outputs/Figure5_missisaDemoRates.pdf", width = 5, height = 7, units = "in", 
        dpi = 1200)
