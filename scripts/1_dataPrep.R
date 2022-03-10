@@ -161,7 +161,15 @@ fireAFFESMiss2010 <- fasterize::fasterize(fireAFFESMiss2010, tmpltRastMiss,
 raster::writeRaster(fireAFFESMiss2010, paste0(outMiss, "fireAFFES2010_250.tif"),
                     datatype = "INT1U", overwrite = TRUE)
 
-# ROF development #=========================
+# ROF development #========================= 
+
+# Operational Cell Claims data was processed in QGIS and the resulting shapefile
+# is provided. Processing involved selecting mining claim areas in the ring of
+# fire by hand. For simplicity, only mining claims associated within the ring of
+# fire (crescent) and associated large area to the south within the database
+# were used in modelling. Identifying the proportion of claims that are/will be
+# mined and the extent of mining within a claim was outside the scope of this
+# work.
 mines_sf <- read_sf("data/inputNV/ROFDevelopment/mine_area.shp")
 
 mines_sf <- mines_sf %>% st_transform(crsUse)
@@ -172,14 +180,17 @@ raster::writeRaster(mines_ras, paste0(outMiss, "mines_ras.tif"), overwrite = TRU
                     datatype = "INT1U")
 
 # proposed roads
-# Get proposed road from Matt's earlier version
-# road_RoF <- read_sf("data/inputNV/ROFDevelopment/RoF_MNRF_2020.shp")
-# 
-# road_prop <- road_RoF %>% filter(layer == "RoF_Centerline") 
-# 
-# The proposed roads were available as polygons but we need lines to calculate density
-# Transferred to QGIS to use GRASS 7:
-# Steps
+ 
+# The proposed roads were also extracted by hand in QGIS from the Operational
+# Alienation and Claim Cells data. Operational_Alienation polygons were filtered
+# to include only rows with the description "Application for SRO, Public Lands
+# Act, see Section 28(3) and 30(b) Mining Act." Duplicate roads were removed by
+# hand, keeping the one with the more recent entry time. An additional section
+# of road was added based on the Operational Cell claims where there is a linear
+# section between the Webequie winter road and the ROF claims. This produced
+# polygons of the road area but lines were needed to calculate density.
+
+# Steps to convert polygons to lines
 # 1. GDAL Calc: 1*(A>0), Output NoData=0; Raster Type=Byte **Important for GRASS
 # 2. r.thin
 # 3. r.to.vect
