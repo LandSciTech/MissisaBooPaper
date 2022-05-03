@@ -106,10 +106,12 @@ tmap_save(boo_fig2, filename = "outputs/Figure1_StudyArea.pdf",
   height = 7, width = 7, units = "in")
 
 # Figure 2 #========================================
+pal <- c('#66c2a5','#fc8d62','#8da0cb')
+
 missisa_fig <- tm_shape(missisa, legend.show=TRUE) + 
   tm_borders(col="grey70", lwd=1)+
   tm_shape(road_2020)+
-  tm_lines(lty="solid", col="black", lwd=2)+
+  tm_lines(lty="solid", col=pal[1], lwd=2)+
   tm_scale_bar(position = c("left","bottom"), text.size = 1)+
   tm_compass(position = c("right", "top"), size=2)+
   tm_layout(main.title="a", main.title.size = 1)
@@ -117,21 +119,21 @@ missisa_fig <- tm_shape(missisa, legend.show=TRUE) +
 missisa_RoF_fig <- tm_shape(missisa, legend.show=TRUE) + 
   tm_borders(col="grey70", lwd=1)+
   tm_shape(road_RoF)+
-  tm_lines(col="grey60", lwd = 2)+
+  tm_lines(col=pal[2], lwd = 2)+
   tm_shape(road_2020)+
-  tm_lines(lty="solid", col="black", lwd = 2)+
+  tm_lines(lty="solid", col= pal[1], lwd = 2)+
   tm_scale_bar(position = c("left","bottom"), text.size=5)+
   tm_compass(position = c("right", "top"), size=2)+
   tm_layout(main.title="b", main.title.size = 1)
 
 missisa_RoFmines_fig <- tm_shape(mines_sf)+
-  tm_fill(col = "#ca0020")+
+  tm_fill(col = pal[3])+
   tm_shape(missisa, legend.show=TRUE, is.master = TRUE) + 
   tm_borders(col="grey70", lwd=1)+
   tm_shape(road_RoF)+
-  tm_lines(col="grey60", lwd = 2)+
+  tm_lines(col=pal[2], lwd = 2)+
   tm_shape(road_2020)+
-  tm_lines(lty="solid", col="black", lwd = 2)+
+  tm_lines(lty="solid", col=pal[1], lwd = 2)+
   tm_scale_bar(position = c("left","bottom"), text.size=5)+
   tm_compass(position = c("right", "top"), size=2)+
   tm_layout(main.title="c", main.title.size = 1)
