@@ -271,3 +271,58 @@ print(missisa_boo_Nip_plot, vp = viewport(layout.pos.row = 3, layout.pos.col = 1
 print(missisa_boo_Pag_plot, vp = viewport(layout.pos.row = 4, layout.pos.col = 1))
 dev.off()
 
+# Figure S1.4 #=========================================
+mod_list <- mget(ls(pattern = "missisa_boo_.*"))
+
+samp_pts <- st_make_grid(missisa, 
+                         n = c(raster::ncol(mod_list[[1]])/10,
+                               raster::nrow(mod_list[[1]])/10),
+                         what = "centers") %>% 
+  st_as_sf() %>% 
+  filter(!st_is_empty(x))
+
+# stk <- mod_list[[1]]
+# nm <- names(mod_list)[1]
+
+get_samp <- function(stk, nm){
+  stk_samp <- raster::extract(stk, samp_pts)
+  
+  stk_df <- stk_samp %>% as.data.frame() %>% 
+    pivot_longer(everything(), names_to = "Season", values_to = "value") %>% 
+    mutate(model = nm, pt_ID = 1:n())
+  
+  stk_df
+}
+
+samp_dfs <- map2(mod_list, names(mod_list), get_samp)
+
+all_samps <- bind_rows(samp_dfs[c("missisa_boo_JB", "missisa_boo_Nip", 
+                                  "missisa_boo_Pag")]) %>% 
+  left_join(samp_dfs["missisa_boo_RoF"][[1]], by = c("Season", "pt_ID")) %>% 
+  filter(!is.na(value.x), !is.na(value.y)) %>% 
+  mutate(model.x = case_when(str_detect(model.x, "JB") ~ "James Bay",
+                             str_detect(model.x, "Nip") ~ "Nipigon",
+                             str_detect(model.x, "Pag") ~ "Pagwachuan",))
+
+comparR <- all_samps %>% group_by(Season, model.x) %>%
+  summarise(pearsonR = cor(value.x, value.y) %>% round(3)) %>% 
+  mutate(x = 0, y = 1.125)
+
+all_samps %>% 
+  ggplot(aes(value.x, value.y))+
+  geom_abline(slope = 1, intercept = 0, col = "grey40")+
+  geom_point(alpha = 0.2, shape = 16, size = 1)+
+  geom_smooth(method = "lm")+
+  geom_text(data = comparR, aes(x, y, label = paste0("R = ", pearsonR)), 
+            hjust = "left", vjust = "top", inherit.aes = FALSE)+
+  facet_grid(model.x ~ Season)+
+  coord_fixed(ylim = c(0, 1.1))+
+  scale_y_continuous(breaks = 0:4/4, labels = c(0, 0.25, 0.50, 0.75, 1) %>% 
+                       as.character())+
+  scale_x_continuous(breaks = 0:4/4, labels = c(0, 0.25, 0.50, 0.75, 1) %>% 
+                       as.character())+
+  labs(x = "Missisa range", y = "Adjacent ranges")+
+  theme_bw()
+
+ggsave("outputs/FigureS1_4_compare_adjacent_missisa_quant.png", width = 7, 
+       height = 5, dpi = 1200)
