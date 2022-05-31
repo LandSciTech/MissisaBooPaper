@@ -10,9 +10,12 @@ dia_shp <- 23
 
 err_col <- "grey50"
 
+baseDir <- "."
+#numbers from Johnson et al for validation
+johnsonCompare <- read.csv(paste0(baseDir,"/data/Johnson et al. figures5_6.csv"))
 
 # get outputs from demographics
-missisa_dist <- read.csv("data/disturbances_missisa_all.csv")
+missisa_dist <- read.csv(paste0(baseDir,"/data/disturbances_missisa_all.csv"))
 
 covTableSim <- data.frame(Anthro = c(missisa_dist$Anthro, 10, 20, 30, 40, 50, 
                                      60, 70, 80, 90), 
@@ -67,12 +70,23 @@ rateSamplesLarge$R_PIlow <- 1
 rateSamplesLarge$R_PIhigh <- 1
 rateSamplesLarge$fullGrp <- paste(rateSamplesLarge$rep) # ,rateSamplesLarge$Fire)
 
+str(johnsonCompare)
+johnsonCompare$Anthro=johnsonCompare$anthro
+johnsonCompare$S_bar=johnsonCompare$Sresp
+johnsonCompare$S_PIlow = johnsonCompare$Slow_95_pred
+johnsonCompare$S_PIhigh = johnsonCompare$Shigh_95_pred
+johnsonCompare$R_bar=johnsonCompare$Rresp/100
+johnsonCompare$R_PIlow = johnsonCompare$Rlow_95_pre/100
+johnsonCompare$R_PIhigh = johnsonCompare$Rhigh_95_pred/100
+
 
 base1 <- ggplot(data = rateSummaries, 
                 aes(x = Anthro, y = S_bar, ymin = S_PIlow, ymax = S_PIhigh)) +
+  geom_ribbon(fill="grey95",colour="grey95",data=johnsonCompare)+
   geom_line(data = subset(rateSamples), size = 0.5, alpha = 0.5, 
             aes(x = Anthro, y = S_bar, group = rep, colour = rep)) +
   geom_line(colour = "grey50", size = 2, linetype = "dotted") +
+  geom_line(colour = "black", size = 2, linetype = "dotted",data=johnsonCompare) +
   # geom_boxplot(data=subset(rateSamplesLarge,Anthro<10),aes(x=Anthro,y=S_bar,group=Anthro),width=2)+
   geom_errorbar(data = subset(rateSummaries, Anthro < 10), 
                 width = 2, size = 0.7, col = err_col) +
@@ -89,10 +103,12 @@ base1 <- ggplot(data = rateSummaries,
 plot_recruitment3 <- ggplot(data = rateSummaries,
                             aes(x = Anthro, y = R_bar * 100, 
                                 ymin = R_PIlow * 100, ymax = R_PIhigh * 100)) +
+  geom_ribbon(fill="grey95",colour="grey95",data=johnsonCompare)+
   geom_line(data = rateSamples, size = 0.5, 
             aes(x = Anthro, y = R_bar * 100, group = fullGrp, color = fullGrp),
             alpha = 0.5) +
   geom_line(colour = "grey50", size = 2, linetype = "dotted") +
+  geom_line(colour = "black", size = 2, linetype = "dotted",data=johnsonCompare) +
   # geom_boxplot(data=subset(rateSamplesLarge,Anthro<10),aes(x=Anthro,y=R_bar*100,group=Anthro),width=2)+
   geom_errorbar(data = subset(rateSummaries, Anthro < 10), width = 2,
                 size = 0.7, col = err_col) +
@@ -177,5 +193,5 @@ plot_lambda <- ggplot(oo,
 ggpubr::ggarrange(base1, plot_recruitment3, plot_lambda, labels = "auto",
                   ncol = 1, vjust = 1)
 
-ggsave("outputs/Figure5_missisaDemoRates.pdf", width = 5, height = 7, units = "in", 
+ggsave(paste0(baseDir,"/outputs/Figure5_missisaDemoRates.pdf"), width = 5.1, height = 7, units = "in", 
        dpi = 1200)
