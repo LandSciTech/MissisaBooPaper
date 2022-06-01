@@ -87,7 +87,7 @@ boo_fig2 <-
   tm_text("RANGE_NAME", size= 1, fontface = "bold")+
   tm_scale_bar(position = c("left","bottom"), text.size=1)+
   tm_compass(position = c("right", "top"), size=3)+
-  tm_layout(frame=F, legend.position = c(0, 0.85), 
+  tm_layout(frame=F, legend.position = c(0, 0.88), 
             legend.title.size = 0.8, 
             legend.height = -0.25)+
   tm_add_legend(type = c("line"), 
@@ -101,9 +101,9 @@ boo_fig2 <-
 vp <- viewport(x=0.89, y=0.98, width = 0.3, height=0.25,
                just=c("right", "top"))
 
-tmap_save(boo_fig2, filename = "outputs/Figure1_StudyArea.pdf",
-  dpi = 1200, insets_tm = canada_overlay, insets_vp = vp,
-  height = 7, width = 7, units = "in")
+tmap_save(boo_fig2, filename = "outputs/Figure1_StudyArea.tiff",
+  dpi = 300, insets_tm = canada_overlay, insets_vp = vp,
+  height = 6, width = 6, units = "in")
 
 # Figure 2 #========================================
 pal <- c('#66c2a5','#fc8d62','#8da0cb')
@@ -112,7 +112,8 @@ missisa_fig <- tm_shape(missisa, legend.show=TRUE) +
   tm_borders(col="grey70", lwd=1)+
   tm_shape(road_2020)+
   tm_lines(lty="solid", col=pal[1], lwd=2)+
-  tm_scale_bar(position = c("left","bottom"), text.size = 1)+
+  tm_scale_bar(position = c("left","BOTTOM"), text.size = 10,
+               breaks = c(0, 50, 100, 150))+
   tm_compass(position = c("right", "top"), size=2)+
   tm_layout(main.title="a", main.title.size = 1)
 
@@ -122,7 +123,8 @@ missisa_RoF_fig <- tm_shape(missisa, legend.show=TRUE) +
   tm_lines(col=pal[2], lwd = 2)+
   tm_shape(road_2020)+
   tm_lines(lty="solid", col= pal[1], lwd = 2)+
-  tm_scale_bar(position = c("left","bottom"), text.size=5)+
+  tm_scale_bar(position = c("left","BOTTOM"), text.size = 10,
+               breaks = c(0, 50, 100, 150))+
   tm_compass(position = c("right", "top"), size=2)+
   tm_layout(main.title="b", main.title.size = 1)
 
@@ -134,14 +136,15 @@ missisa_RoFmines_fig <- tm_shape(mines_sf)+
   tm_lines(col=pal[2], lwd = 2)+
   tm_shape(road_2020)+
   tm_lines(lty="solid", col=pal[1], lwd = 2)+
-  tm_scale_bar(position = c("left","bottom"), text.size=5)+
+  tm_scale_bar(position = c("left","BOTTOM"), text.size = 10,
+               breaks = c(0, 50, 100, 150))+
   tm_compass(position = c("right", "top"), size=2)+
   tm_layout(main.title="c", main.title.size = 1)
 
 missisa_map <- tmap_arrange(missisa_fig, missisa_RoF_fig, missisa_RoFmines_fig)
 
-tmap_save(missisa_map, "outputs/Figure2_MissisaScenarios.pdf", dpi=600, units="in", 
-          height=4, width=7)
+tmap_save(missisa_map, "outputs/Figure2_MissisaScenarios.tiff", dpi = 300, units="in", 
+          height=3, width=6)
 
 # Figure 3 #==============================================================
 #Read in the data
@@ -162,17 +165,17 @@ missisa_boo_plot <- tm_shape(missisa_boo,
             breaks = seq(0,1, by=0.25))+
   tm_shape(road_2010)+
   tm_lines(col = "white")+
-  tm_layout(legend.outside.position = "right", 
+  tm_layout(legend.outside = TRUE, legend.outside.position = "right", 
             #main.title="Missisa - Reproduction",
             panel.label.size = 1,
             legend.text.size = 0.85,
-            legend.title.size = 1)+
+            legend.title.size = 1, legend.outside.size = 0.15)+
   tm_facets(nrow = 1)
 
 missisa_boo_plot
 
-tmap_save(missisa_boo_plot, "outputs/Figure3_Missisa2010.pdf", dpi=1200,
-          height = 2, width = 7)
+tmap_save(missisa_boo_plot, "outputs/Figure3_Missisa2010.tiff", dpi = 300,
+          height = 1.5, width = 5.5)
 
 # Figure 4 #====================================================================
 missisa_boo_RoF_plot <- tm_shape(missisa_boo_RoF, 
@@ -202,7 +205,9 @@ missisa_legend <- tm_shape(missisa_boo_RoF$Fall, raster.downsample = F)+
             legend.show = T,
             style="cont",
             breaks = seq(0,1, by=0.25))+
-  tm_layout(legend.only = T)
+  tm_layout(legend.only = T, legend.width = 2, legend.height = 10, 
+            legend.position = c("right", "center"),
+            legend.just = c("left", "center"))
 
 #Nipigon
 
@@ -261,9 +266,9 @@ missisa_boo_JB_plot <- tm_shape(missisa_boo_JB,
             main.title.size = 1)+
   tm_facets(nrow = 1)
 
-pdf("outputs/Figure4_MissisaROFDevComapare.pdf", width = 7, height = 8, units = "in")
+tiff("outputs/Figure4_MissisaROFDevComapare.tiff", width = 5.5, height = 6, units = "in", res = 300)
 grid.newpage()
-page.layout <- grid.layout(nrow = 4, ncol = 2, widths=c(.9,.1), 
+page.layout <- grid.layout(nrow = 4, ncol = 2, widths=c(.85,.15), 
                            heights=c(0.25, 0.25, 0.25, 0.25))
 pushViewport(viewport(layout = page.layout))
 print(missisa_boo_RoF_plot, vp = viewport(layout.pos.row = 1, layout.pos.col = 1))
@@ -274,7 +279,7 @@ print(missisa_boo_Pag_plot, vp = viewport(layout.pos.row = 4, layout.pos.col = 1
 dev.off()
 
 # Figure S1.4 #=========================================
-mod_list <- mget(ls(pattern = "missisa_boo_.*"))
+mod_list <- mget(ls(pattern = "missisa_boo_...?$"))
 
 samp_pts <- st_make_grid(missisa, 
                          n = c(raster::ncol(mod_list[[1]])/10,
@@ -326,5 +331,5 @@ all_samps %>%
   labs(x = "Missisa range", y = "Adjacent ranges")+
   theme_bw()
 
-ggsave("outputs/FigureS1_4_compare_adjacent_missisa_quant.png", width = 7, 
-       height = 5, dpi = 1200)
+ggsave("outputs/FigureS1_4_compare_adjacent_missisa_quant.tiff", width = 7, 
+       height = 5, dpi = 300)

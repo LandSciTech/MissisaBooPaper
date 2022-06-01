@@ -71,7 +71,7 @@ raw <- ggplot(see, aes(x = N0, y = lambda, colour = method, group = grp)) +
   ylab(expression("Average Population Trend " * lambda)) +
   xlab("Initial Population Size")
 
-ggsave("outputs/WholeNumberMethodLambda.pdf", raw, width = 7, height = 7)
+ggsave("outputs/WholeNumberMethodLambda.tiff", raw, width = 7, height = 7, dpi = 300)
 
 see$Na <- see$N
 see$Na[see$N == 0] <- 0.001
@@ -85,4 +85,4 @@ finalN <- ggplot(see, aes(x = N0, y = Na, colour = method, group = grp)) +
                      labels = c(0, 0.1, 1, 100)) +
   ylab("Population Size at t=20") +
   xlab("Initial Population Size")
-ggsave("outputs/WholeNumberMethodN.pdf", finalN, width = 7, height = 7)
+ggsave("outputs/WholeNumberMethodN.tiff", finalN, width = 7, height = 7, dpi = 300)

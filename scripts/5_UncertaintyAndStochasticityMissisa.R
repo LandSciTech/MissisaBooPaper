@@ -193,5 +193,5 @@ plot_lambda <- ggplot(oo,
 ggpubr::ggarrange(base1, plot_recruitment3, plot_lambda, labels = "auto",
                   ncol = 1, vjust = 1)
 
-ggsave(paste0(baseDir,"/outputs/Figure5_missisaDemoRates.pdf"), width = 5.1, height = 7, units = "in", 
-       dpi = 1200)
+ggsave(paste0(baseDir,"/outputs/Figure5_missisaDemoRates.tiff"), width = 5.1, height = 7, units = "in", 
+       dpi = 300)
