@@ -209,7 +209,8 @@ road_ORNMNRFMissBuf <- st_buffer(road_ORNMNRFMiss, 100) %>% st_union()
 road_propMissMinus2020 <- st_difference(road_propMiss, road_ORNMNRFMissBuf)
 
 road_ORNMNRFPlusPropMiss <- rbind(road_propMissMinus2020 %>% select(YEAR_CO),
-                                  road_ORNMNRFMiss) %>% 
+                                  road_ORNMNRFMiss %>% transmute(YEAR_CO = YEAR_CONSTRUCTED) %>% 
+                                    rename(geometry = Shape)) %>% 
   st_union() %>% st_sf()
 
 st_write(road_ORNMNRFPlusPropMiss, paste0(outMiss, "road_ROFDevelopment.shp"))
