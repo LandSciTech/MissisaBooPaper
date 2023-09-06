@@ -34,20 +34,20 @@ pars <- merge(pars, rateSamplesP)
 
 nrow(pars)
 numSteps <- 20
-pars1 <- cbind(pars, popGrowthJohnson(pars$N0,
+pars1 <- cbind(pars, caribouPopGrowth(pars$N0,
   numSteps = numSteps, R_bar = pars$R_bar,
   S_bar = pars$S_bar, probOption = "binomial"
 ))
 
 sum(pars1$N == 0)
 # pars1=pars
-pars2 <- cbind(pars, popGrowthJohnson(pars$N0,
+pars2 <- cbind(pars, caribouPopGrowth(pars$N0,
   numSteps = numSteps, R_bar = pars$R_bar,
   S_bar = pars$S_bar, probOption = "matchJohnson2020"
 ))
 min(pars2$N)
 
-pars3 <- cbind(pars, popGrowthJohnson(pars$N0,
+pars3 <- cbind(pars, caribouPopGrowth(pars$N0,
   numSteps = numSteps, R_bar = pars$R_bar,
   S_bar = pars$S_bar, probOption = "continuous"
 ))
@@ -62,6 +62,7 @@ pars3$method <- "continuous"
 see <- rbind(pars1, pars2, pars3)
 see$grp <- paste0(see$method, see$N0)
 see$fireExclAnthro <- as.factor(see$fire_excl_anthro)
+see <- repair_names(see)
 raw <- ggplot(see, aes(x = N0, y = lambda, colour = method, group = grp)) +
   facet_grid(Anthro ~ fireExclAnthro, 
              labeller = labeller(Anthro = label_both,

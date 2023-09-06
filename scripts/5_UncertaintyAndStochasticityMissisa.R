@@ -86,7 +86,8 @@ base1 <- ggplot(data = rateSummaries,
   geom_line(data = subset(rateSamples), size = 0.5, alpha = 0.5, 
             aes(x = Anthro, y = S_bar, group = rep, colour = rep)) +
   geom_line(colour = "grey50", size = 2, linetype = "dotted") +
-  geom_line(colour = "black", size = 2, linetype = "dotted",data=johnsonCompare) +
+  geom_line(colour = "black", size = 2, linetype = "dotted",
+            data = subset(johnsonCompare, Anthro <= 90)) +
   # geom_boxplot(data=subset(rateSamplesLarge,Anthro<10),aes(x=Anthro,y=S_bar,group=Anthro),width=2)+
   geom_errorbar(data = subset(rateSummaries, Anthro < 10), 
                 width = 2, size = 0.7, col = err_col) +
@@ -108,7 +109,8 @@ plot_recruitment3 <- ggplot(data = rateSummaries,
             aes(x = Anthro, y = R_bar * 100, group = fullGrp, color = fullGrp),
             alpha = 0.5) +
   geom_line(colour = "grey50", size = 2, linetype = "dotted") +
-  geom_line(colour = "black", size = 2, linetype = "dotted",data=johnsonCompare) +
+  geom_line(colour = "black", size = 2, linetype = "dotted",
+            data = subset(johnsonCompare, Anthro <= 90)) +
   # geom_boxplot(data=subset(rateSamplesLarge,Anthro<10),aes(x=Anthro,y=R_bar*100,group=Anthro),width=2)+
   geom_errorbar(data = subset(rateSummaries, Anthro < 10), width = 2,
                 size = 0.7, col = err_col) +
@@ -128,7 +130,7 @@ pars <- data.frame(N0 = c(round(745 / 2)))
 pars <- merge(pars, data.frame(rrp = 1))
 pars <- merge(pars, rateSamplesLarge)
 numSteps <- 20
-pars1 <- cbind(pars, popGrowthJohnson(pars$N0,
+pars1 <- cbind(pars, caribouPopGrowth(pars$N0,
   numSteps = numSteps, R_bar = pars$R_bar,
   S_bar = pars$S_bar, probOption = "binomial"
 ))
@@ -138,7 +140,7 @@ pars <- data.frame(N0 = round(745 / 2))
 pars <- merge(pars, data.frame(rrp = 1)) 
 pars <- merge(pars, rateSamples)
 numSteps <- 20
-pars2 <- cbind(pars, popGrowthJohnson(pars$N0,
+pars2 <- cbind(pars, caribouPopGrowth(pars$N0,
   numSteps = numSteps, R_bar = pars$R_bar,
   S_bar = pars$S_bar, probOption = "binomial"
 ))
@@ -146,7 +148,7 @@ pars2 <- cbind(pars, popGrowthJohnson(pars$N0,
 
 check <- subset(pars1, Anthro == missisa_dist$Anthro[3])
 testPars <- list(R_bar = mean(check$R_bar), S_bar = mean(check$S_bar))
-popGrowthJohnson(round(745 / 2), numSteps = 20, R_bar = testPars$R_bar, 
+caribouPopGrowth(round(745 / 2), numSteps = 20, R_bar = testPars$R_bar, 
                  S_bar = testPars$S_bar, probOption = "continuous", 
                  interannualVar = F)
 # this is theoretical lambda - to confirm
