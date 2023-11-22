@@ -61,14 +61,6 @@
         "Matrix"
       ]
     },
-    "PROJ": {
-      "Package": "PROJ",
-      "Version": "0.4.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "fa50a399b8c887285a1a02c748a4bfe8",
-      "Requirements": []
-    },
     "R2WinBUGS": {
       "Package": "R2WinBUGS",
       "Version": "2.1-21",
@@ -137,14 +129,6 @@
         "Matrix",
         "Rcpp"
       ]
-    },
-    "RcppProgress": {
-      "Package": "RcppProgress",
-      "Version": "0.4.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "1c0aa18b97e6aaa17f93b8b866c0ace5",
-      "Requirements": []
     },
     "SparseM": {
       "Package": "SparseM",
@@ -347,25 +331,28 @@
     },
     "caribouMetrics": {
       "Package": "caribouMetrics",
-      "Version": "0.2.0",
-      "Source": "unknown",
+      "Version": "0.3.1",
+      "Source": "GitHub",
       "Remotes": "LandSciTech/pfocal,\n        LandSciTech/BayesianCaribouDemographicProjection",
-      "Hash": "6fc08b7ee13d5a7ddf43e13cffbe4546",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "caribouMetrics",
+      "RemoteUsername": "LandSciTech",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "dbfadeca145709b42a69cdd6fe19fe82c2e8b4d5",
+      "Hash": "3ba6a9108c74a79001002517ea49b5e2",
       "Requirements": [
         "R2jags",
         "data.table",
         "dplyr",
-        "exactextractr",
         "matrixStats",
         "purrr",
         "rlang",
         "sf",
         "simstudy",
-        "spex",
-        "stars",
         "survival",
-        "tidyr",
-        "units"
+        "terra",
+        "tidyr"
       ]
     },
     "cellranger": {
@@ -496,14 +483,6 @@
         "jsonlite",
         "lazyeval"
       ]
-    },
-    "crsmeta": {
-      "Package": "crsmeta",
-      "Version": "0.3.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "76ad515a0acb138c0e93f017c7aefd11",
-      "Requirements": []
     },
     "crul": {
       "Package": "crul",
@@ -675,6 +654,7 @@
       "Hash": "b64edcde9380d386cd1d2f5a01c3eef4",
       "Requirements": [
         "Rcpp",
+        "raster",
         "sf"
       ]
     },
@@ -703,6 +683,7 @@
       "Requirements": [
         "Rcpp",
         "RcppArmadillo",
+        "raster",
         "sp"
       ]
     },
@@ -795,26 +776,12 @@
         "Rcpp"
       ]
     },
-    "geometry": {
-      "Package": "geometry",
-      "Version": "0.4.6.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "ad478db366f6cbb6c463e3527584d754",
-      "Requirements": [
-        "Rcpp",
-        "RcppProgress",
-        "linprog",
-        "lpSolve",
-        "magic"
-      ]
-    },
     "ggplot2": {
       "Package": "ggplot2",
-      "Version": "3.4.2",
+      "Version": "3.4.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3a147ee02e85a8941aad9909f1b43b7b",
+      "Hash": "85846544c596e71f8f46483ab165da33",
       "Requirements": [
         "MASS",
         "cli",
@@ -943,14 +910,6 @@
         "tibble",
         "vctrs"
       ]
-    },
-    "gridBase": {
-      "Package": "gridBase",
-      "Version": "0.4-7",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "c6b1256546a22b4b9f4fae3ba5117b97",
-      "Requirements": []
     },
     "gridExtra": {
       "Package": "gridExtra",
@@ -1159,6 +1118,7 @@
         "htmlwidgets",
         "leaflet",
         "png",
+        "raster",
         "sf"
       ]
     },
@@ -1178,6 +1138,7 @@
         "magrittr",
         "markdown",
         "png",
+        "raster",
         "scales",
         "sp",
         "viridis"
@@ -1215,16 +1176,6 @@
         "rlang"
       ]
     },
-    "linprog": {
-      "Package": "linprog",
-      "Version": "0.9-4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "66e9d4ebd71ddcd6f86a2a9a34f5cdc5",
-      "Requirements": [
-        "lpSolve"
-      ]
-    },
     "lme4": {
       "Package": "lme4",
       "Version": "1.1-30",
@@ -1242,14 +1193,6 @@
         "nlme",
         "nloptr"
       ]
-    },
-    "lpSolve": {
-      "Package": "lpSolve",
-      "Version": "5.6.16",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "8d81b756eff69fdd22bb028b7e0f4cac",
-      "Requirements": []
     },
     "lubridate": {
       "Package": "lubridate",
@@ -1272,16 +1215,6 @@
         "Rcpp",
         "sf",
         "units"
-      ]
-    },
-    "magic": {
-      "Package": "magic",
-      "Version": "1.6-0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "d3e70e3dfb54a19327ded37407ab7f34",
-      "Requirements": [
-        "abind"
       ]
     },
     "magrittr": {
@@ -1474,14 +1407,6 @@
         "tibble"
       ]
     },
-    "palr": {
-      "Package": "palr",
-      "Version": "0.3.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "3c812a6fc41caba1f05e8ff6216a7c35",
-      "Requirements": []
-    },
     "pbkrtest": {
       "Package": "pbkrtest",
       "Version": "0.5.1",
@@ -1596,14 +1521,6 @@
         "prettyunits"
       ]
     },
-    "proj4": {
-      "Package": "proj4",
-      "Version": "1.0-11",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "1dc246e456885b1c652dfaafe97e93f6",
-      "Requirements": []
-    },
     "proxy": {
       "Package": "proxy",
       "Version": "0.4-27",
@@ -1632,22 +1549,6 @@
         "magrittr",
         "rlang",
         "vctrs"
-      ]
-    },
-    "quadmesh": {
-      "Package": "quadmesh",
-      "Version": "0.5.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "25a46fed02c6f62659da1565bc8a0ba6",
-      "Requirements": [
-        "geometry",
-        "gridBase",
-        "palr",
-        "png",
-        "reproj",
-        "scales",
-        "sp"
       ]
     },
     "quantreg": {
@@ -1690,6 +1591,18 @@
       "Repository": "CRAN",
       "Hash": "5e3c5dc0b071b21fa128676560dbe94d",
       "Requirements": []
+    },
+    "raster": {
+      "Package": "raster",
+      "Version": "3.6-23",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "337d6d70f7d6bf78df236a5a53f09db0",
+      "Requirements": [
+        "Rcpp",
+        "sp",
+        "terra"
+      ]
     },
     "readr": {
       "Package": "readr",
@@ -1768,18 +1681,6 @@
         "rmarkdown",
         "rstudioapi",
         "withr"
-      ]
-    },
-    "reproj": {
-      "Package": "reproj",
-      "Version": "0.4.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "7dce2d989b045462f0e45c140e8483aa",
-      "Requirements": [
-        "PROJ",
-        "crsmeta",
-        "proj4"
       ]
     },
     "rjags": {
@@ -1978,19 +1879,6 @@
         "lattice"
       ]
     },
-    "spex": {
-      "Package": "spex",
-      "Version": "0.7.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "f46cddff9a0525a8a4219d65fde7bad6",
-      "Requirements": [
-        "crsmeta",
-        "quadmesh",
-        "reproj",
-        "sp"
-      ]
-    },
     "stars": {
       "Package": "stars",
       "Version": "0.6-0",
@@ -2056,6 +1944,16 @@
       "Hash": "90b28393209827327de889f49935140a",
       "Requirements": [
         "cpp11"
+      ]
+    },
+    "terra": {
+      "Package": "terra",
+      "Version": "1.7-46",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d15182a8a20ffc5880e721bfa1bf4ce9",
+      "Requirements": [
+        "Rcpp"
       ]
     },
     "testthat": {
