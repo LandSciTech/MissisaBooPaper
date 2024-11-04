@@ -1,5 +1,5 @@
 # MissisaBooPaper
-Code repository for the paper Anticipating impacts of development on boreal caribou: A roadmap for improving the usefulness, transparency, and availability of impact assessment tools
+Code repository for the paper Effective conservation decisions require models designed for purpose: a case study for boreal caribou in Ontario’s Ring of Fire
 
 For the data repository please see https://osf.io/r9mkp/
 
