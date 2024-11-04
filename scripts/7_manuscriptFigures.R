@@ -62,7 +62,9 @@ ecozones <- read_sf("data/inputNV/Ecozones/ecozones.shp")
 hudPlBorSheild <- ecozones %>% 
   filter(ZONE_NAME %in% c("Hudson Plain", "Boreal Shield")) %>% 
   st_transform(st_crs(caribouRanges)) %>% 
-  st_intersection(caribouRanges)
+  st_intersection(caribouRanges) %>% 
+  mutate(ZONE_NAME = ifelse(ZONE_NAME == "Hudson Plain", "Hudson's Bay Lowlands", 
+                            ifelse(ZONE_NAME == "Boreal Shield", "Ontario Shield ", ZONE_NAME)))
 
 # Figure 1 #============================
 canada_overlay <- tm_shape(canada, projection = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs")+
@@ -70,7 +72,7 @@ canada_overlay <- tm_shape(canada, projection = "+proj=lcc +lat_1=20 +lat_2=60 +
   tm_shape(caribouRanges)+
   tm_fill("grey")+
   tm_layout(frame=FALSE)
-
+tmap_options(check.and.fix = TRUE)
 boo_fig2 <- 
   tm_shape(hudPlBorSheild)+
   tm_fill(col = "ZONE_NAME", title = "Ecozone", alpha = 0.6, 
@@ -89,7 +91,7 @@ boo_fig2 <-
   tm_compass(position = c("right", "top"), size=3)+
   tm_layout(frame=F, legend.position = c(0, 0.88), 
             legend.title.size = 0.8, 
-            legend.height = -0.25)+
+            legend.height = -0.26)+
   tm_add_legend(type = c("line"), 
                 labels = c("Managed Forest\nBoundary"),
                 col = c("#0571b0"), lty = "dashed", lwd = 2)+
