@@ -6,7 +6,7 @@ theme_set(theme_bw())
 #################
 # Get population recruitment and survival samples, and associated population
 # projections
-popGrowthPars <- demographicCoefficients(
+popGrowthPars <- getNationalCoefficients(
   100, modelVersion = "Johnson",
   survivalModelNumber = "M1",
   recruitmentModelNumber = "M4"
@@ -20,7 +20,7 @@ covTableSim <- subset(covTableSim, Total_dist <= 100)
 
 ###########
 # Is the relationship between rates and lambda correct?
-rateSamplesP <- demographicRates(
+rateSamplesP <- estimateNationalRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthPars,
   ignorePrecision = F, returnSample = T, useQuantiles = F
@@ -36,20 +36,23 @@ nrow(pars)
 numSteps <- 20
 pars1 <- cbind(pars, caribouPopGrowth(pars$N0,
   numSteps = numSteps, R_bar = pars$R_bar,
-  S_bar = pars$S_bar, probOption = "binomial"
+  S_bar = pars$S_bar, probOption = "binomial",
+  interannualVar = list(R_CV = 0.2116, S_CV = 0.0076)
 ))
 
 sum(pars1$N == 0)
 # pars1=pars
 pars2 <- cbind(pars, caribouPopGrowth(pars$N0,
   numSteps = numSteps, R_bar = pars$R_bar,
-  S_bar = pars$S_bar, probOption = "matchJohnson2020"
+  S_bar = pars$S_bar, probOption = "matchJohnson2020",
+  interannualVar = list(R_CV = 0.2116, S_CV = 0.0076)
 ))
 min(pars2$N)
 
 pars3 <- cbind(pars, caribouPopGrowth(pars$N0,
   numSteps = numSteps, R_bar = pars$R_bar,
-  S_bar = pars$S_bar, probOption = "continuous"
+  S_bar = pars$S_bar, probOption = "continuous",
+  interannualVar = list(R_CV = 0.2116, S_CV = 0.0076)
 ))
 min(pars3$N)
 

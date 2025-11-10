@@ -26,31 +26,31 @@ covTableSim$polygon <- paste0("Missisa_", covTableSim$Anthro + 1)
 covTableSim$area <- "FarNorth"
 covTableSim$Total_dist <- covTableSim$Anthro + covTableSim$fire_excl_anthro
 
-popGrowthPars <- demographicCoefficients(500,
+popGrowthPars <- getNationalCoefficients(500,
   modelVersion = "Johnson",
   survivalModelNumber = "M1",
   recruitmentModelNumber = "M4"
 )
 
-popGrowthParsSmall <- demographicCoefficients(35,
+popGrowthParsSmall <- getNationalCoefficients(35,
   modelVersion = "Johnson",
   survivalModelNumber = "M1",
   recruitmentModelNumber = "M4"
 )
 
-rateSamples <- demographicRates(
+rateSamples <- estimateNationalRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthParsSmall,
   ignorePrecision = F, returnSample = T, useQuantiles = T
 )
 
-rateSamplesLarge <- demographicRates(
+rateSamplesLarge <- estimateNationalRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthPars,
   ignorePrecision = F, returnSample = T, useQuantiles = T
 )
 
-rateSummaries <- demographicRates(
+rateSummaries <- estimateNationalRates(
   covTable = covTableSim, popGrowthPars = popGrowthPars,
   ignorePrecision = F, returnSample = F, useQuantiles = F
 )
@@ -132,7 +132,8 @@ pars <- merge(pars, rateSamplesLarge)
 numSteps <- 20
 pars1 <- cbind(pars, caribouPopGrowth(pars$N0,
   numSteps = numSteps, R_bar = pars$R_bar,
-  S_bar = pars$S_bar, probOption = "binomial"
+  S_bar = pars$S_bar, probOption = "binomial",
+  interannualVar = list(R_CV = 0.2116, S_CV = 0.0076)
 ))
 
 pars <- data.frame(N0 = round(745 / 2))
@@ -142,7 +143,8 @@ pars <- merge(pars, rateSamples)
 numSteps <- 20
 pars2 <- cbind(pars, caribouPopGrowth(pars$N0,
   numSteps = numSteps, R_bar = pars$R_bar,
-  S_bar = pars$S_bar, probOption = "binomial"
+  S_bar = pars$S_bar, probOption = "binomial",
+  interannualVar = list(R_CV = 0.2116, S_CV = 0.0076)
 ))
 
 

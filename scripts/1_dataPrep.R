@@ -95,6 +95,7 @@ road_ORNMiss <- road_ORNMiss %>%
 
 road_ORNMissMinusMNRF <- st_difference(road_ORNMiss, road_MNRFMissBuf)
 
+#TO DO: fix
 road_ORNMNRFMiss <- bind_rows(road_ORNMissMinusMNRF, road_MNRFMiss) %>%
   select(contains("YEAR_CONSTRUCTED"))
 
