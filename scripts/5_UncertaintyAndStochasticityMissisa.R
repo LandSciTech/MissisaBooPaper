@@ -199,3 +199,9 @@ ggpubr::ggarrange(base1, plot_recruitment3, plot_lambda, labels = "auto",
 
 ggsave(paste0(baseDir,"/outputs/Figure5_missisaDemoRates.tiff"), width = 5.1, height = 7, units = "in", 
        dpi = 300)
+
+ggsave(paste0(baseDir,"/outputs/Figure5_missisaDemoRates.png"), width = 5.1, height = 7, units = "in", 
+       dpi = 300)
+
+ggsave(paste0(baseDir,"/outputs/Figure5_missisaDemoRates.pdf"), width = 5.1, height = 7, units = "in")
+

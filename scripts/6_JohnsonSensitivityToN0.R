@@ -27,7 +27,7 @@ rateSamplesP <- estimateNationalRates(
 )
 
 # project each sample population
-pars <- data.frame(N0 = c(10, 20, 30, 40, 50, 60, 70))
+pars <- data.frame(N0 = c(10, 30, 50, 70, 90, 110, 130))
 # increase to get a better sample size, or set interannualVar to NA
 pars <- merge(pars, data.frame(rrp = seq(1, 1))) 
 pars <- merge(pars, rateSamplesP)
@@ -75,7 +75,11 @@ raw <- ggplot(see, aes(x = N0, y = lambda, colour = method, group = grp)) +
   ylab(expression("Average Population Trend " * lambda)) +
   xlab("Initial Population Size")
 
+
 ggsave("outputs/WholeNumberMethodLambda.tiff", raw, width = 7, height = 7, dpi = 300)
+ggsave("outputs/WholeNumberMethodLambda.pdf", raw, width = 7, height = 7)
+ggsave("outputs/WholeNumberMethodLambda.png", raw, width = 7, height = 7, dpi = 300)
+
 
 see$Na <- see$N
 see$Na[see$N == 0] <- 0.001
@@ -90,3 +94,5 @@ finalN <- ggplot(see, aes(x = N0, y = Na, colour = method, group = grp)) +
   ylab("Population Size at t=20") +
   xlab("Initial Population Size")
 ggsave("outputs/WholeNumberMethodN.tiff", finalN, width = 7, height = 7, dpi = 300)
+ggsave("outputs/WholeNumberMethodN.pdf", finalN, width = 7, height = 7)
+ggsave("outputs/WholeNumberMethodN.png", finalN, width = 7, height = 7, dpi = 300)
