@@ -19,7 +19,7 @@ road_RoF <- read_sf(file.path(dat_pth, "road_ROFDevelopment.shp"))
 
 road_2020 <- read_sf(file.path(dat_pth, "road_ORNMNRFMiss2020.shp"))
 road_2010 <- read_sf(file.path(dat_pth, "road_ORNMNRFMiss2010.shp"))
-province2<- raster::getData(country="Canada", level=1)
+province2<- geodata::gadm(country="Canada", level=1, resolution = 1)
 
 canada <- province2 %>% 
   st_as_sf() %>% 

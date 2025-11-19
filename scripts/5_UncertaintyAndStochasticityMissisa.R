@@ -139,14 +139,14 @@ plot_lambdaT <- ggplot(data = subset(changeSummary$summary,Parameter==cPar),
   xlab("Anthropogenic Disturbance (%)") +
   ylab(expression("Annual Growth Rate " * lambda)) +
   scale_x_continuous(limits = c(-1, 90), breaks = c(0, 20, 40, 60, 80)) +
-  scale_y_continuous(limits = c(0.5, 1.5)) +
+  scale_y_continuous(limits = c(0, 1.5)) +
   theme(legend.position = "none", plot.margin = margin(l = 0.6, unit = "cm"))
 plot(plot_lambdaT)
 
 
 # combine ggplots to one figure
 ggpubr::ggarrange(base1, plot_recruitment3, plot_lambda,plot_lambdaT, labels = "auto",
-                  ncol = 1, vjust = 1)
+                  ncol = 1, vjust = 1, align = "v")
 ggsave(paste0(baseDir,"/outputs/Figure5_missisaDemoRates.tiff"), width = 5.1, height = 7, units = "in", 
        dpi = 300)
 ggsave(paste0(baseDir,"/outputs/Figure5_missisaDemoRates.png"), width = 5.1, height = 7, units = "in", 
