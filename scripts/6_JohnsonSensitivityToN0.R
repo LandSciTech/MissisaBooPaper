@@ -66,16 +66,17 @@ see <- rbind(pars1, pars2, pars3)
 see$grp <- paste0(see$method, see$N0)
 see$fireExclAnthro <- as.factor(see$fire_excl_anthro)
 see <- repair_names(see)
-raw <- ggplot(see, aes(x = N0, y = lambda, colour = method, group = grp)) +
+raw <- ggplot(see, aes(x = N0, y = lambda, colour = method,group = grp)) +
   facet_grid(Anthro ~ fireExclAnthro, 
              labeller = labeller(Anthro = label_both,
                                  fireExclAnthro = label_both)) +
   geom_violin(position = "dodge", scale = "width", adjust = 0.5) +
   theme(legend.position = "top") +
   ylab(expression("Average Population Trend " * lambda)) +
-  xlab("Initial Population Size")
+  xlab("Initial Population Size")+
+  scale_color_manual(values=c('#1b9e77','#d95f02','#7570b3'))
 
-
+print(raw)
 ggsave("outputs/WholeNumberMethodLambda.tiff", raw, width = 7, height = 7, dpi = 300)
 ggsave("outputs/WholeNumberMethodLambda.pdf", raw, width = 7, height = 7)
 ggsave("outputs/WholeNumberMethodLambda.png", raw, width = 7, height = 7, dpi = 300)
@@ -92,7 +93,9 @@ finalN <- ggplot(see, aes(x = N0, y = Na, colour = method, group = grp)) +
   scale_y_continuous(trans = "log10", breaks = c(0.001, 0.01, 1, 100), 
                      labels = c(0, 0.1, 1, 100)) +
   ylab("Population Size at t=20") +
-  xlab("Initial Population Size")
+  xlab("Initial Population Size")+
+  scale_color_manual(values=c('#1b9e77','#d95f02','#7570b3'))
+
 ggsave("outputs/WholeNumberMethodN.tiff", finalN, width = 7, height = 7, dpi = 300)
 ggsave("outputs/WholeNumberMethodN.pdf", finalN, width = 7, height = 7)
 ggsave("outputs/WholeNumberMethodN.png", finalN, width = 7, height = 7, dpi = 300)

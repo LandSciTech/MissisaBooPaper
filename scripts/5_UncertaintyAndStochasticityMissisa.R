@@ -17,6 +17,9 @@ johnsonCompare <- read.csv(paste0(baseDir,"/data/Johnson et al. figures5_6.csv")
 
 # get outputs from demographics
 missisa_dist <- read.csv(paste0(baseDir,"/data/disturbances_missisa_all.csv"))
+missisa_dist$Year[missisa_dist$Scenario=="Base"]=2025
+missisa_dist$Year[missisa_dist$Scenario=="Roads Only"]=2035
+missisa_dist$Year[missisa_dist$Scenario=="Roads and Mines"]=2045
 
 disturbanceChange <- data.frame(Anthro = seq(1,90,by=2), 
                           Fire = unique(missisa_dist$Fire),
@@ -41,8 +44,8 @@ sampleTrajectories$samples$upper=1
 unique(sampleTrajectories$samples$MetricTypeID)
 
 changeSummary <- trajectoriesFromNational(replicates=500,N0=N0,useQuantiles=F,returnSamples=F,disturbance=disturbanceChange)
-missisaSummary <- trajectoriesFromNational(replicates=500,N0=N0,useQuantiles=F,disturbance=missisa_dist)
-
+missisaSummary <- trajectoriesFromNational(replicates=500,N0=N0,useQuantiles=F,returnSamples=T,disturbance=missisa_dist)
+missisaSummary$samples$lower=NA;missisaSummary$samples$upper=NA
 str(johnsonCompare)
 johnsonCompare$R_bar=johnsonCompare$Rresp/100
 johnsonCompare$R_PIlow = johnsonCompare$Rlow_95_pre/100
@@ -63,12 +66,12 @@ base1 <- ggplot(data = subset(changeSummary$summary,Parameter==cPar),
   geom_ribbon(fill="grey95",colour="grey95",data=johnsonSurv)+
   geom_line(data = subset(sampleTrajectories$samples,MetricTypeID==cMetric), size = 0.5, alpha = 0.25, 
             aes(x = AnthroID, y = Amount, group = Replicate, colour = Replicate)) +
+  geom_violin(data = subset(missisaSummary$samples, MetricTypeID==cMetric),aes(x=AnthroID,y=Amount,group=AnthroID), 
+              width = 2, size = 0.7, col = err_col) +
   geom_line(colour = "grey50", size = 2, linetype = "dotted") +
   geom_line(colour = "black", size = 2, linetype = "dotted",
             data = subset(johnsonSurv, AnthroID <= 90)) +
   # geom_boxplot(data=subset(rateSamplesLarge,Anthro<10),aes(x=Anthro,y=S_bar,group=Anthro),width=2)+
-  geom_errorbar(data = subset(missisaSummary$summary, Parameter==cPar), 
-                width = 2, size = 0.7, col = err_col) +
   # geom_point(data=subset(rateSummaries,Anthro<10))+
   geom_point(data = data.frame(AnthroID = 0.27, Mean = 0.8, 
                                lower = 0, upper = 0), 
@@ -86,12 +89,14 @@ plot_recruitment3 <- ggplot(data = subset(changeSummary$summary,Parameter==cPar)
   geom_ribbon(fill="grey95",colour="grey95",data=johnsonRec)+
   geom_line(data = subset(sampleTrajectories$samples,MetricTypeID==cMetric), size = 0.5, alpha = 0.25, 
             aes(x = AnthroID, y = Amount*100, group = Replicate, colour = Replicate)) +
+  geom_violin(data = subset(missisaSummary$samples, MetricTypeID==cMetric),aes(x=AnthroID,y=Amount*100,group=AnthroID), 
+              width = 2, size = 0.7, col = err_col) +
   geom_line(colour = "grey50", size = 2, linetype = "dotted") +
   geom_line(colour = "black", size = 2, linetype = "dotted",
             data = subset(johnsonRec, AnthroID <= 90)) +
   # geom_boxplot(data=subset(rateSamplesLarge,Anthro<10),aes(x=Anthro,y=S_bar,group=Anthro),width=2)+
-  geom_errorbar(data = subset(missisaSummary$summary, Parameter==cPar), 
-                width = 2, size = 0.7, col = err_col) +
+  #geom_errorbar(data = subset(missisaSummary$summary, Parameter==cPar), 
+  #              width = 2, size = 0.7, col = err_col) +
   # geom_point(data=subset(rateSummaries,Anthro<10))+
   geom_point(data = data.frame(AnthroID = 0.27, Mean = 0.142, lower = 0, 
                                upper = 0),
@@ -108,10 +113,12 @@ plot_lambda <- ggplot(data = subset(changeSummary$summary,Parameter==cPar),
                             aes(x = AnthroID, y = Mean, ymin = lower, ymax = upper)) +
   geom_line(data = subset(sampleTrajectories$samples,MetricTypeID==cMetric), size = 0.5, alpha = 0.25, 
             aes(x = AnthroID, y = Amount, group = Replicate, colour = Replicate)) +
+  geom_violin(data = subset(missisaSummary$samples, MetricTypeID==cMetric),aes(x=AnthroID,y=Amount,group=AnthroID), 
+              width = 2, size = 0.7, col = err_col) +
   geom_line(colour = "grey50", size = 2, linetype = "dotted") +
   # geom_boxplot(data=subset(rateSamplesLarge,Anthro<10),aes(x=Anthro,y=S_bar,group=Anthro),width=2)+
-  geom_errorbar(data = subset(missisaSummary$summary, Parameter==cPar), 
-                width = 2, size = 0.7, col = err_col) +
+  #geom_errorbar(data = subset(missisaSummary$summary, Parameter==cPar), 
+  #              width = 2, size = 0.7, col = err_col) +
   # geom_point(data=subset(rateSummaries,Anthro<10))+
   geom_point(data = data.frame(AnthroID = 0.27, Mean = 0.86, lower = 0, 
                                upper = 0),
@@ -128,10 +135,12 @@ plot_lambdaT <- ggplot(data = subset(changeSummary$summary,Parameter==cPar),
                       aes(x = AnthroID, y = Mean, ymin = lower, ymax = upper)) +
   geom_line(data = subset(sampleTrajectories$samples,MetricTypeID==cMetric), size = 0.5, alpha = 0.25, 
             aes(x = AnthroID, y = Amount, group = Replicate, colour = Replicate)) +
+  geom_violin(data = subset(missisaSummary$samples, MetricTypeID==cMetric),aes(x=AnthroID,y=Amount,group=AnthroID), 
+              width = 2, size = 0.7, col = err_col) +
   #geom_line(colour = "grey50", size = 2, linetype = "dotted") +
   # geom_boxplot(data=subset(rateSamplesLarge,Anthro<10),aes(x=Anthro,y=S_bar,group=Anthro),width=2)+
-  geom_errorbar(data = subset(missisaSummary$summary, Parameter==cPar), 
-                width = 2, size = 0.7, col = err_col) +
+  #geom_errorbar(data = subset(missisaSummary$summary, Parameter==cPar), 
+  #              width = 2, size = 0.7, col = err_col) +
   # geom_point(data=subset(rateSummaries,Anthro<10))+
   geom_point(data = data.frame(AnthroID = 0.27, Mean = 0.86, lower = 0, 
                                upper = 0),

@@ -72,38 +72,38 @@ canada_overlay <- tm_shape(canada, projection = "+proj=lcc +lat_1=20 +lat_2=60 +
   tm_shape(caribouRanges)+
   tm_fill("grey")+
   tm_layout(frame=FALSE)
-tmap_options(check.and.fix = TRUE)
+tmap_options(check_and_fix = TRUE)
 boo_fig2 <- 
   tm_shape(hudPlBorSheild)+
-  tm_fill(col = "ZONE_NAME", title = "Ecozone", alpha = 0.6, 
-          palette = c("#f4a582", "#92c5de"))+
-  tm_shape(caribouRanges, is.master = TRUE) + 
+  tm_polygons(fill = "ZONE_NAME", fill.legend = tm_legend(title="Ecozone"), fill_alpha = 0.6, 
+          fill.scale = tm_scale_categorical(values=c("#f4a582", "#92c5de")))+
+  tm_shape(caribouRanges, is.master = TRUE) +
+  tm_graticules(lines=F)+
   tm_borders()+
   tm_shape(aouline3)+
   tm_lines(col = "#0571b0", lty = "dashed", lwd = 2)+
   tm_shape(mines_sf)+
-  tm_fill(col = "#ca0020")+
+  tm_fill(col = "#ca0020",fill="#ca0020")+
   tm_shape(missisa)+
   tm_borders(col="black", lwd = 2)+
   tm_shape(caribouRanges, is.master = TRUE) +
   tm_text("RANGE_NAME", size= 1, fontface = "bold")+
-  tm_scale_bar(position = c("left","bottom"), text.size=1)+
+  tm_scalebar(position = c("left","bottom"), text.size=1)+
   tm_compass(position = c("right", "top"), size=3)+
-  tm_layout(frame=F, legend.position = c(0, 0.88), 
-            legend.title.size = 0.8, 
-            legend.height = -0.26)+
-  tm_add_legend(type = c("line"), 
+  tm_layout(legend.bg.alpha=0,frame=F,legend.frame=F, legend.position = c(0, 1.15), 
+            legend.title.size = 0.8)+
+  tm_add_legend(frame=F,type = c("lines"), 
                 labels = c("Managed Forest\nBoundary"),
                 col = c("#0571b0"), lty = "dashed", lwd = 2)+
-  tm_add_legend(type = c("fill"), 
+  tm_add_legend(frame=F,type = c("polygons"), 
                 labels = c("Mining Claims"),
-                col = c("#ca0020"), 
-                border.col = NA)
+                fill = c("#ca0020"), 
+                col = NA)
 
 vp <- viewport(x=0.89, y=0.98, width = 0.3, height=0.25,
                just=c("right", "top"))
 
-tmap_save(boo_fig2, filename = "outputs/Figure1_StudyArea.tiff",
+tmap_save(boo_fig2, filename = "outputs/Figure1_StudyArea.png",
   dpi = 300, insets_tm = canada_overlay, insets_vp = vp,
   height = 6, width = 6, units = "in")
 
