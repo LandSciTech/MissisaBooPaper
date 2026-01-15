@@ -33,9 +33,9 @@ canada <- province2 %>%
 # aou2 <- st_sf(geometry = aou2) %>% 
 #   sf_remove_holes(aou2)
 # 
-# mines_sf <- read_sf("data/inputNV/ROFDevelopment/mine_area.shp") %>% 
-#   st_union() %>% 
-#   st_transform(st_crs(missisa)) 
+# mines_sf <- read_sf("data/inputNV/ROFDevelopment/RoF_operational_cell_claims_dissolved2.gpkg") %>%
+#   st_union() %>%
+#   st_transform(st_crs(missisa))
 # 
 # # save aou and mines union since it took a long time
 # st_write(aou2, "data/inputNV/MNR_FMUs_20220208/AOU.shp")
@@ -104,7 +104,7 @@ boo_fig2 <-
 vp <- viewport(x=0.89, y=0.98, width = 0.3, height=0.25,
                just=c("right", "top"))
 
-tmap_save(boo_fig2, filename = "outputs/Figure1_StudyArea.png",
+tmap_save(boo_fig2, filename = "outputs/Figure1_StudyArea.tiff",
   dpi = 300, insets_tm = canada_overlay, insets_vp = vp,
   height = 6, width = 6, units = "in")
 

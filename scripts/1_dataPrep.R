@@ -171,7 +171,7 @@ raster::writeRaster(fireAFFESMiss2010, paste0(outMiss, "fireAFFES2010_250.tif"),
 # were used in modelling. Identifying the proportion of claims that are/will be
 # mined and the extent of mining within a claim was outside the scope of this
 # work.
-mines_sf <- read_sf("data/inputNV/ROFDevelopment/mine_area.shp")
+mines_sf <- read_sf("data/inputNV/ROFDevelopment/RoF_operational_cell_claims_dissolved2.gpkg")
 
 mines_sf <- mines_sf %>% st_transform(crsUse)
 
