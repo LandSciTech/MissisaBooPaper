@@ -13,9 +13,9 @@ popGrowthPars <- getNationalCoefficients(
 )
 
 covTableSim <- expand.grid(Anthro = seq(0, 80, by = 20), 
-                           fire_excl_anthro = seq(0, 60, by = 20))
+                           Fire_excl_anthro = seq(0, 60, by = 20))
 covTableSim$polygon <- "test"
-covTableSim$Total_dist <- covTableSim$Anthro + covTableSim$fire_excl_anthro
+covTableSim$Total_dist <- covTableSim$Anthro + covTableSim$Fire_excl_anthro
 covTableSim <- subset(covTableSim, Total_dist <= 100)
 
 ###########
@@ -64,7 +64,7 @@ pars2$method <- "rounding"
 pars3$method <- "continuous"
 see <- rbind(pars1, pars2, pars3)
 see$grp <- paste0(see$method, see$N0)
-see$fireExclAnthro <- as.factor(see$fire_excl_anthro)
+see$fireExclAnthro <- as.factor(see$Fire_excl_anthro)
 see <- repair_names(see)
 raw <- ggplot(see, aes(x = N0, y = lambda, colour = method,group = grp)) +
   facet_grid(Anthro ~ fireExclAnthro, 

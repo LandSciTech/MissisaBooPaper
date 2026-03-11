@@ -23,11 +23,11 @@ missisa_dist$Year[missisa_dist$Scenario=="Roads and Mines"]=2045
 
 disturbanceChange <- data.frame(Anthro = seq(1,90,by=2), 
                           Fire = unique(missisa_dist$Fire),
-                          fire_excl_anthro = unique(missisa_dist$Fire))
+                          Fire_excl_anthro = unique(missisa_dist$Fire))
 #covTableSim$polygon <- paste0("Missisa_", covTableSim$Anthro + 1)
 #covTableSim$area <- "FarNorth"
 
-disturbanceChange$Total_dist <- disturbanceChange$Anthro + disturbanceChange$fire_excl_anthro
+disturbanceChange$Total_dist <- disturbanceChange$Anthro + disturbanceChange$Fire_excl_anthro
 disturbanceChange$Year <- seq(1:nrow(disturbanceChange))
 
 N0 = c(round(745 / 2))
